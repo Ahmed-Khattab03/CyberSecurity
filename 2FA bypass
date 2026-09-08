@@ -1,0 +1,28 @@
+# **Title:** OTP Non-Invalidation on Resend Leads to Massive Pool of Concurrently Valid Codes → 2FA Bypass
+
+**Summary:**
+
+The 2FA resend-OTP function does not invalidate previously generated OTPs when a new one is issued. By triggering the resend function a large number of times (e.g. sending a batch of requests via Burp Repeater/Intruder across one or many connections), an attacker can cause a very large number of OTPs to become valid simultaneously. Because all of these OTPs remain active at once, the effective keyspace an attacker must guess against is drastically reduced — a single guess, or a very small number of guesses, has a meaningfully high chance of matching one of the many valid outstanding codes. This allows 2FA bypass without needing to exhaustively brute-force the full 000000–999999 range.
+
+**Vulnerability Type:** Improper Session/Token Invalidation + Missing Rate Limiting (CWE-613: Insufficient Session Expiration, related to CWE-307)
+
+**Affected Endpoint:** POST /auth/signinup/code/resend
+
+**Steps to Reproduce:**
+
+1. Log in with valid credentials for a test account to reach the 2FA/OTP step.
+2. Intercept the resend-OTP request in Burp Suite.
+3. Send this request to Repeater/Intruder and fire it repeatedly in a batch (e.g. hundreds to millions of requests, single or multiple connections).
+4. Confirm that each resend generates a *new* OTP without invalidating prior ones — i.e., multiple previously-issued OTPs still authenticate successfully at the verify endpoint.
+5. With a large number of OTPs concurrently valid, submit a guessed/random 6-digit code (or a small batch of guesses) at the verify endpoint.
+6. Observe that authentication succeeds — confirming the attacker bypassed 2FA without needing to brute-force the entire keyspace, because the pool of "correct answers" was artificially inflated.
+
+**Proof of Concept:**
+
+https://drive.google.com/file/d/1r3dkWhRu1tt27wubC66RTahD_hDGsY_F/view?usp=sharing
+
+**Impact:**
+
+- Full 2FA bypass and account takeover, given only valid credentials up to the OTP step.
+- No dependence on exhaustive brute force — the vulnerability effectively shrinks the guess space by keeping an unbounded number of past codes alive.
+- Fully automatable and scriptable at scale.
