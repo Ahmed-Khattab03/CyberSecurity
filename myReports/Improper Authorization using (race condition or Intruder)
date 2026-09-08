@@ -1,0 +1,32 @@
+# Race Condition leading to Privilege Persistence / Unauthorized Re-Invitation after Removal
+
+### كان بدل ال race condition كنت ممكن افتح ال intruder وافضل ابعت invite لنفسى فال owner يمسحنى فبعد اما اتمسح الاقينى قادر ابعت invite لنفسى تانى واخش عال org تانى
+
+## Summary :
+
+Improper Authorization and race condition leads to preventing owner from removing the admin or performing its noramal actions.
+
+## Steps :
+
+1. go to console.verda.com and login
+2. create org “test” that its owner “victim”
+3. invite “hacker” as admin
+4. invite “user” as developer
+5. from “victim” remove “hacker”(admin) and intercept and send to repeater
+    1. NOTE : Only that request will use “victim”(owner) credentials. all other requests will be done with “hacker”(admin) credentials
+6. from “hacker” remove “user”(developer) and intercept and send to repeater
+7. invite yourself twice and intercept and send to repeater
+    1. first as developer
+    2. second as admin
+8. change the role for yourself to “admin” from your account and intercept and send to repeater
+9. put all on a group and send in parallel
+10. Focus :  ok?  
+    1. if the time that is taken for removing “hacker” < time taken for other actions. the “hacker” won’t be removed and other actions will be done and “hacker” can do any another actions as normal 
+    2. if the time that is taken for removing “hacker” > time taken for other actions. the “hacker” will be removed but other actions will be done and “hacker” can do any another actions as normal 
+
+## Impact :
+
+1. **Unauthorized state changes** by a user whose privileges are actively being revoked (removal of “user” by “hacker” after revocation)
+2. **Full privilege re-escalation that defeats deliberate removal by an Owner**: the platform cannot guarantee that an Owner's "remove Admin" action is final. This is functionally equivalent to the attacker holding persistent, self-renewing Admin access regardless of administrative intervention.
+3. **Broader risk**: this pattern likely generalizes to any privileged, state-changing endpoint sharing the same non-atomic authorization design (billing changes, ownership transfer, API key management)
+4. **Business impact**: breaks the fundamental trust assumption that an Owner/Admin can revoke another user's access.
