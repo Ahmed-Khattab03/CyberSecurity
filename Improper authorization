@@ -1,0 +1,18 @@
+Title: Deleted organization members are still able to delete chats and contacts
+
+Summary:
+deleted user can delete chats after deletion
+
+Steps To Reproduce:
+1. go to info.wavelo.com
+2. register with acc A & B
+3. invite B to A org and don't give him any permissions => it's a bug I submitted before
+4. B : go to https://chat.sarbacane.com will permit you to access anything on ORG.
+5. owner delete me from chat.wavelo.com
+6. after I was deleted I still can delete the contacts and chats
+7. if chat didn't delete from the first time make delete action again and will be deleted.
+
+Impact
+loss of integrity : removed users still have access to delete chats and contacts.
+Data Loss for the Organization : Deleted users still have access to do actions on the org.
+loss of Availability : removed users still can make the ORG resources unavailable.
