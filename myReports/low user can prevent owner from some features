@@ -1,0 +1,30 @@
+# Title: low user can prevent owner from some features
+
+## **Summary:**
+
+low privilege user(user) who by default don't have access to any feature (chat or contact or etc) can access chat with owner privilege and delete the original owner
+
+## **Steps To Reproduce:**
+
+1. go to https://info.wavelo.com
+2. register with A and B
+3. invite B(Attacker) to A(victim) and don't give him access to anything
+4. notice that B can't go to chats but when change subdomain to chat.wavelo.com
+5. notice that B access chats and the worst that his role is Owner , too => that's bug because ORG shouldn't have 2 Owners.
+
+---
+
+1. delete the original owner (A) or change his role to user to prevent him from access chat feature that lead to take over chat feature with the least privilege.
+
+## **Supporting Material/References:**
+
+[list any additional material (e.g. screenshots, logs, etc.)]
+
+- [attachment / reference]
+
+## **Impact**
+
+1. The owner can no longer manage that specific paid feature.
+2. partial takeover of the org
+3. loss the users' confidence because of they will pay for features that he can't access.
+4. low user will show chats that shouldn't access it and that affects the confidence.
