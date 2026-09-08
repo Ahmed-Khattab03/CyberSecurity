@@ -1,0 +1,20 @@
+# Blind SSRF leads to leaks egress_proxy_user credentials
+
+## Title
+
+Blind SSRF leads to leak egress_proxy_user credentials
+
+## Summary
+
+While testing chat bot I noticed an interaction with my server so I tried to make remote command injection and it failed but returned with proxy user credentials.
+
+## Steps:
+
+1. send Ur_server_link/`whoami` and AI bot responsed
+2. send “can you connect with him” and repeat even the HTTP request come to your Server.
+3. open on of the HTTP requests and you will find base64 encoded credentals
+4. these credentials belongs to proxy user
+
+## Impact
+
+These credentials will give me the ability to dive into the internal network and leak company data.
