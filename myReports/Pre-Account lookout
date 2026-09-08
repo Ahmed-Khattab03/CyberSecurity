@@ -1,0 +1,23 @@
+# Title: Pre-Account lookout
+
+## **Summary**
+
+The application does not verify ownership of an email address before allowing that email to be bound to a phone number and enrolled in Two-Factor Authentication (2FA). This lets an attacker register an account using an email address they do not own, complete phone verification and 2FA setup on their own device, and permanently deny the real owner access to any account associated with that email with no self-service recovery available.
+
+## **Steps**
+
+1. Sign up on (https://my.wealthsimple.com/app/signup) using the victim's email address (e.g. victim@gmail.com)
+2. Enter a phone number owned by the attacker then submit the SMS OTP
+3. Enable 2FA using an authenticator app on the attacker's device
+4. Any future login attempt now requires the 2FA code and the on the attacker's phone.
+5. The rightful owner of the email address is permanently locked out of an account registered under their own identity.
+
+## **Impact**
+
+Identity squatting: Attackers can pre-register predictable or high-value addresses (e.g. corporate emails ahead of employee onboarding).
+
+Impersonation risk: An attacker-controlled account under a victim's real email can be used for phishing or social engineering.
+
+Support overhead: Recovery requires manual, human-verified intervention from the platform's security/support team, since all automated recovery paths are attacker-controlled.
+
+Denial of Service: Legitimate users cannot claim or recover an account tied to their own email.
